@@ -1,6 +1,7 @@
 package com.example.steamy.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -72,17 +74,37 @@ fun DetailScreen(itemId: Int, viewModel: ProductViewModel, onBack: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(50.dp))
 
-                // Mostramos el nombre del producto.
-                Text(item.nombre, style = MaterialTheme.typography.titleMedium, fontSize = 24.sp)
-                Spacer(Modifier.height(8.dp))
-                // Mostramos la descripción del producto.
-                Text(item.descripcion, style = MaterialTheme.typography.bodyMedium, fontSize = 18.sp)
-                Spacer(Modifier.height(8.dp))
-                // Mostramos la Categoria del producto.
-                Text(item.categoria, style = MaterialTheme.typography.bodyMedium, fontSize = 18.sp)
-                Spacer(Modifier.height(8.dp))
-                // Mostramos el precio del producto.
-                Text("Precio: $${item.precio}", style = MaterialTheme.typography.bodyMedium, fontSize = 20.sp)
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp), // separa cada texto
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = item.nombre,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontSize = 24.sp
+                    )
+
+                    Text(
+                        text = item.descripcion,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontSize = 18.sp
+                    )
+
+                    Text(
+                        text = "Categoría: ${item.categoria}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontSize = 18.sp
+                    )
+
+                    Text(
+                        text = "Precio: $${item.precio}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
 
             } else {
                 // Si no encontramos el producto, mostramos un mensaje de error.

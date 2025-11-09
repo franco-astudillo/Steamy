@@ -5,6 +5,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -26,9 +27,11 @@ fun AppNavGraph() {
     val showBottomBar = currentRoute in showBottomBarRoutes
 
     Scaffold(
+        containerColor = Color(0xFF1E2124), // fondo general oscuro
         bottomBar = {
             if (showBottomBar) BottomBar(navController = navController, items = bottomItems)
         }
+
     ) { innerPadding ->
         NavHost(
             navController = navController,

@@ -24,23 +24,40 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.steamy.data.model.Producto
 import com.example.steamy.navigation.Routes
+import com.example.steamy.ui.theme.AzulHielo
 import com.example.steamy.ui.viewmodel.ProductViewModel
 
 @Composable
-fun HomeScreen(viewModel: ProductViewModel, onItemClick: (Int) -> Unit, navController: NavHostController) {
+
+fun HomeScreen(
+    viewModel: ProductViewModel,
+    onItemClick: (Int) -> Unit,
+    navController: NavHostController
+) {
     val productos by viewModel.productos.collectAsState()
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(
-            text = "Bienvenido a SoloSolo",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AzulHielo) // color claro tipo gris suave
+            .padding(16.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Bienvenido a Steamy",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.padding(bottom = 80.dp) // espacio para BottomBar
+            modifier = Modifier.padding(bottom = 80.dp)
         ) {
             items(productos) { producto ->
                 ItemRow(producto = producto) {
@@ -50,6 +67,7 @@ fun HomeScreen(viewModel: ProductViewModel, onItemClick: (Int) -> Unit, navContr
         }
     }
 }
+
 
 @Composable
 fun ItemRow(producto: Producto, onClick: () -> Unit) {
@@ -72,7 +90,7 @@ fun ItemRow(producto: Producto, onClick: () -> Unit) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxHeight()
-                    .width(100.dp)
+                    .width(200.dp)
                     .clip(RoundedCornerShape(8.dp))
             )
 
@@ -83,6 +101,7 @@ fun ItemRow(producto: Producto, onClick: () -> Unit) {
                     .weight(1f)
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween
+
             ) {
                 Text(text = producto.nombre, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Text(
