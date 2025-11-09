@@ -11,23 +11,32 @@ import kotlinx.coroutines.launch
 
 
 // ViewModel principal que maneja la lógica de productos.
-class MainViewModel(
-    private val repo: ProductoRepository = ProductoRepository()
+class ProductViewModel(
+    private val repository: ProductoRepository = ProductoRepository()
+
 ) : ViewModel() {
 
-    // Estado interno que guarda la lista de productos disponibles.
+    // Estado interno que guarda la lista de productos disponibles
+
     private val _productos = MutableStateFlow<List<Producto>>(emptyList())
 
     // Exponemos los productos como un flujo de solo lectura para que la UI pueda observarlos.
+
     val productos: StateFlow<List<Producto>> = _productos.asStateFlow()
 
-    init {
-        // Al iniciar el ViewModel, lanzamos una corrutina para cargar todos los productos desde el repositorio.
+    init{
+        // Al iniciar el ViewModel, lanzamos una corrutina para cargar todos los productos desde el repositorio
+
         viewModelScope.launch {
-            _productos.value = repo.getAllProductos()
+            _productos.value = repository.getAllProductos()
         }
     }
 
-    // Función para obtener un producto específico por su ID.
-    fun getProducto(id: Int): Producto? = repo.getProductoById(id)
+    // Funcion para obtener un producto especifico por su id
+
+    fun getProducto(id: Int): Producto? = repository.getProductoById(id)
+
+    // Funcion para obtener un producto por su categoria
+
+    fun getProductoCategoria(categoria: String): Producto? = repository.getProductoByCategoria(categoria)
 }

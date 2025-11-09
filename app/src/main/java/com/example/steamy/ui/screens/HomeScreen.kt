@@ -2,6 +2,7 @@ package com.example.steamy.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,42 +20,50 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.steamy.data.model.Producto
-import com.example.steamy.ui.viewmodel.MainViewModel
+import com.example.steamy.navigation.Routes
+import com.example.steamy.ui.viewmodel.ProductViewModel
 
 @Composable
-fun HomeScreen(viewModel: MainViewModel) {
+fun HomeScreen(viewModel: ProductViewModel, onItemClick: (Int) -> Unit, navController: NavHostController) {
     val productos by viewModel.productos.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(
-            text = "Steamy",
+            text = "Bienvenido a SoloSolo",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(bottom = 80.dp) // espacio para BottomBar
+        ) {
             items(productos) { producto ->
-                ItemRow(producto = producto)
+                ItemRow(producto = producto) {
+                    navController.navigate(Routes.detailRoute(producto.id))
+                }
             }
         }
     }
 }
 
-
 @Composable
-fun ItemRow(producto: Producto) {
+fun ItemRow(producto: Producto, onClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(IntrinsicSize.Min) // ajusta la altura al contenido más alto
+                .height(IntrinsicSize.Min)
                 .padding(12.dp)
         ) {
             AsyncImage(
@@ -62,8 +71,8 @@ fun ItemRow(producto: Producto) {
                 contentDescription = producto.nombre,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .fillMaxHeight() // ocupa todo el alto de la Row
-                    .width(100.dp)    // ancho fijo
+                    .fillMaxHeight()
+                    .width(100.dp)
                     .clip(RoundedCornerShape(8.dp))
             )
 
@@ -72,15 +81,27 @@ fun ItemRow(producto: Producto) {
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight(), // opcional, para alinear verticalmente
+                    .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = producto.nombre, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Text(text = producto.descripcion, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(text = "$${producto.precio}", fontSize = 16.sp, color = MaterialTheme.colorScheme.primary)
+                Text(
+                    text = producto.descripcion,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = producto.categoria,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = "$${producto.precio}",
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }
 }
-
 
