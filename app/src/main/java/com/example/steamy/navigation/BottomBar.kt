@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.compose.material.icons.filled.ShoppingCart
 
 sealed class BottomNavItem(
     val route: String,
@@ -21,6 +22,8 @@ sealed class BottomNavItem(
     val icon: androidx.compose.ui.graphics.vector.ImageVector
 ) {
     object Home : BottomNavItem(Routes.HOME, "Inicio", Icons.Default.Home)
+    object Cart : BottomNavItem(Routes.CART, "Carrito", Icons.Default.ShoppingCart)
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,16 +40,13 @@ fun BottomBar(navController: NavHostController, items: List<BottomNavItem>) {
             NavigationBarItem(
                 icon = { Icon(item.icon, contentDescription = item.label) },
                 label = { Text(item.label) },
-                selected = currentRoute == item.route,
+                selected = currentRoute?.startsWith(item.route) == true,
                 onClick = {
-                    if (currentRoute != item.route) {
-                        navController.navigate(item.route) {
-                            popUpTo(navController.graph.startDestinationRoute ?: Routes.HOME) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+                    navController.navigate(item.route) {
+                        popUpTo(Routes.HOME) {
+                            saveState = true
                         }
+                        launchSingleTop = true
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
@@ -54,7 +54,7 @@ fun BottomBar(navController: NavHostController, items: List<BottomNavItem>) {
                     selectedTextColor = Color.White,
                     unselectedIconColor = Color.LightGray,
                     unselectedTextColor = Color.LightGray,
-                    indicatorColor = Color(0xFF3C3F44) // color de fondo del ítem seleccionado
+                    indicatorColor = Color(0xFF3C3F44)
                 )
             )
         }

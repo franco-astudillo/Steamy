@@ -25,12 +25,14 @@ import coil.compose.AsyncImage
 import com.example.steamy.data.model.Producto
 import com.example.steamy.navigation.Routes
 import com.example.steamy.ui.theme.AzulHielo
+import com.example.steamy.ui.viewmodel.CartViewModel
 import com.example.steamy.ui.viewmodel.ProductViewModel
 
 @Composable
 
 fun HomeScreen(
     viewModel: ProductViewModel,
+    cartViewModel: CartViewModel,
     onItemClick: (Int) -> Unit,
     navController: NavHostController
 ) {
@@ -55,14 +57,25 @@ fun HomeScreen(
             )
         }
 
+        Button(
+            onClick = {navController.navigate(Routes.CART)},
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ){
+            Text("Ver carrito")
+        }
+
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.padding(bottom = 80.dp)
         ) {
             items(productos) { producto ->
-                ItemRow(producto = producto) {
-                    navController.navigate(Routes.detailRoute(producto.id))
-                }
+                ItemRow(
+                    producto = producto,
+                    onClick = { navController.navigate(Routes.detailRoute(producto.id)) },
+                    cartViewModel = cartViewModel
+                )
             }
         }
     }
@@ -70,57 +83,59 @@ fun HomeScreen(
 
 
 @Composable
-fun ItemRow(producto: Producto, onClick: () -> Unit) {
+fun ItemRow(producto: Producto, onClick: () -> Unit, cartViewModel: CartViewModel) {
     Card(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(12.dp)
-        ) {
-            AsyncImage(
-                model = producto.productImg,
-                contentDescription = producto.nombre,
-                contentScale = ContentScale.Crop,
+        Column(modifier = Modifier.padding(12.dp)) {
+            Row(
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .width(200.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceBetween
-
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min)
             ) {
-                Text(text = producto.nombre, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Text(
-                    text = producto.descripcion,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                AsyncImage(
+                    model = producto.productImg,
+                    contentDescription = producto.nombre,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(200.dp)
+                        .clip(RoundedCornerShape(8.dp))
                 )
-                Text(
-                    text = producto.categoria,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = "$${producto.precio}",
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.primary
-                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = producto.nombre, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text(text = producto.descripcion, fontSize = 14.sp)
+                    Text(text = producto.categoria, fontSize = 14.sp)
+                    Text(text = "$${producto.precio}", fontSize = 16.sp, color = MaterialTheme.colorScheme.primary)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Button(onClick = onClick) {
+                    Text("Ver detalles")
+                }
+                Button(onClick = { cartViewModel.addToCart(producto) }) {
+                    Text("Agregar al carrito")
+                }
             }
         }
     }
 }
+
+
 

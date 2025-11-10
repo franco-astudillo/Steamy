@@ -110,6 +110,7 @@ fun DetailScreen(itemId: Int, viewModel: ProductViewModel, onBack: () -> Unit) {
                 // Si no encontramos el producto, mostramos un mensaje de error.
                 Text("Item no encontrado")
             }
+
         }
     }
 }
