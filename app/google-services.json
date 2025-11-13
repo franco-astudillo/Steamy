@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "539758312805",
+    "project_id": "steamy-d8e30",
+    "storage_bucket": "steamy-d8e30.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539758312805:android:e56b9b999959321ec0b58c",
+        "android_client_info": {
+          "package_name": "com.example.steamy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTte5KWtpuEAVtkpJX_y07GNjdjkQw-mA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

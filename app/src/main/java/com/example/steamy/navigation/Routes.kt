@@ -7,5 +7,9 @@ object Routes {
 
     const val CART = "cart"
 
+    const val LOGIN = "login"
+
+    const val REGISTER = "register"
+
     fun detailRoute(productoId: Int) = "detail/$productoId"
 }

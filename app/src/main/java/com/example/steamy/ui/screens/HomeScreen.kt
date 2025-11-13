@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,6 +39,17 @@ fun HomeScreen(
 ) {
     val productos by viewModel.productos.collectAsState()
 
+    // 🔐 Paso 6: Verifica autenticación
+    LaunchedEffect(Unit) {
+        val user = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
+        if (user == null || !user.isEmailVerified) {
+            navController.navigate(Routes.LOGIN) {
+                popUpTo(Routes.HOME) { inclusive = true }
+            }
+        }
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,14 +69,7 @@ fun HomeScreen(
             )
         }
 
-        Button(
-            onClick = {navController.navigate(Routes.CART)},
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        ){
-            Text("Ver carrito")
-        }
+
 
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
